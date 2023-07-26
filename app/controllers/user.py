@@ -15,8 +15,10 @@ class User(BaseModel):
     height: float
     weight: float
     gender: int
+
     class Config:
         orm_mode = True
+
 
 class Diet(BaseModel):
     food_id: int
@@ -25,11 +27,16 @@ class Diet(BaseModel):
         orm_mode = True
 
 
+class user_change(BaseModel):
+    height: float
+    weight: float
+    gender: int
+
 
 @router.get("/{user_id}")
 def user_get(
-    user_id: int,
-    session: Session = Depends(get_session)
+        user_id: int,
+        session: Session = Depends(get_session)
 ) -> User:
     user: m.User | None = session.execute(
         sql_exp
@@ -38,6 +45,7 @@ def user_get(
     ).scalar_one_or_none()
 
     return User.from_orm(user)
+
 
 @router.get("/{user_id}/diet/list")
 def diet_get(
@@ -52,7 +60,17 @@ def diet_get(
 
     return Diet.from_orm(diet)
 
+
 @router.post("/{user_id}/diet")
 def diet_post(user_id: int, item: Diet):
     return JsonResponse(item, status=status.HTTP_201_CREATED)
 
+
+@router.patch("{user_id}", response_model=user_change)
+async def update_user(user_id: str, item: user_change):
+    stored_item_data = m.User[user_id]
+    stored_item_model = user_change(**stored_item_data)
+    update_data = item.dict(exclude_unset=True)
+    updated_item = stored_item_model.copy(update=update_data)
+    m.User[user_id] = jsonable_encoder(updated_item)
+    return updated_item
