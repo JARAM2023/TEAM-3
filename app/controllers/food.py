@@ -25,7 +25,7 @@ class Food(BaseModel):
 
 
 @router.get("/{food_id}")
-def user_get(
+def food_get(
         food_id: int,
         session: Session = Depends(get_session)
 ) -> Food:
@@ -36,3 +36,5 @@ def user_get(
     ).scalar_one_or_none()
 
     return Food.from_orm(food)
+
+
