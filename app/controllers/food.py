@@ -24,6 +24,13 @@ class Food(BaseModel):
         orm_mode = True
 
 
+class search_food(BaseModel):
+    name: str
+
+    class Config:
+        orm_mode = True
+
+
 @router.get("/{food_id}")
 def food_get(
         food_id: int,
@@ -38,3 +45,15 @@ def food_get(
     return Food.from_orm(food)
 
 
+@router.post("/search")
+def search_food(
+        item: search_food,
+        session: Session = Depends(get_session)
+) -> food:
+    food: m.Food | None = session.execute(
+        sql_exp
+        .select(m.Food)
+        .where(m.Food.name == item.name)
+    ).scalar_one_or_none()
+
+    return Food.from_orm(food)
