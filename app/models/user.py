@@ -10,4 +10,4 @@ class User(ModelBase):
     id = Column(sqltypes.Integer, primary_key=True)
 
     username = Column(sqltypes.String, unique=True, nullable=False)
-    password = Column(sqltypes.String, nullable=True)
+    password = Column(sqltypes.String, nullable=False)
