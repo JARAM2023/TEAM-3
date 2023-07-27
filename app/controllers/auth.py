@@ -60,7 +60,7 @@ def login(item: login_user, session: Session = Depends(get_session())) -> login_
 
     return {"message": 'Login successful'}
 
-    '''
+'''
     match_user = [u for u in m.User if u.username == item.username]
     if not matched_user:
         raise HTTPException(status_code=401, detail="Login denied")
