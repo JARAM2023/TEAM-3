@@ -1,0 +1,16 @@
+version: '3'
+services:
+    postgres:
+        image: postgres
+        environment:
+            - POSTGRES_DB=team3
+            - POSTGRES_USER=team3
+            - POSTGRES_PASSWORD=devpassword
+        volumes:
+            - postgres-data:/var/lib/postgresql/data
+        ports:
+            - "127.0.0.1:35000:5432"
+
+volumes:
+    postgres-data:
+        driver: local
