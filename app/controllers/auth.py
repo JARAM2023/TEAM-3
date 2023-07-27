@@ -29,14 +29,13 @@ class signup_user(BaseModel):
 
 
 @router.post("/signup")
-def signup(item: signup_user,session: Session = Depends(get_session())) -> signup_user:
-    instance: m.User | None = session.execute(sql_exp.select(m.User).where(m.User.username==signup_user.username)).scalar_one_or_none()
+def signup(item: signup_user, session: Session = Depends(get_session())) -> signup_user:
+    instance: m.User | None = session.execute(
+        sql_exp.select(m.User).where(m.User.username == item.username)).scalar_one_or_none()
     if instance is not None:
         raise HTTPException(status_code=400, detail="Username already taken")
     else:
         return JsonResponse(item, status=status.HTTP_201_CREATED)
-
-
 
     '''
     if any(existing_user.username == item.username for existing_user in m.User):
@@ -45,8 +44,19 @@ def signup(item: signup_user,session: Session = Depends(get_session())) -> signu
         return JsonResponse(item, status=status.HTTP_201_CREATED)
     '''
 
+
 @router.post("/login")
-def login(item: login_user):
+def login(item: login_user, session: Session = Depends(get_session())) -> login_user:
+    instance: m.User | None = session.execute(
+        sql_exp.select(m.User).where(m.User.username == item.username)).scalar_one_or_none()
+    if instance is None:
+        raise HTTPException(status_code=401, detail="Login denied")
+    if instance.password is not item.password:
+        raise HTTPException(status_code=401, detail="Login denied")
+
+    return {"message": 'Login successful'}
+
+    '''
     match_user = [u for u in m.User if u.username == item.username]
     if not matched_user:
         raise HTTPException(status_code=401, detail="Login denied")
@@ -54,3 +64,4 @@ def login(item: login_user):
         raise HTTPException(status_code=401, detail="Login denied")
 
     return {"message": "Login successful"}
+    '''
