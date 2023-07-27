@@ -1,5 +1,9 @@
+from http.client import HTTPException
+
+from django.http import JsonResponse
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
+from rest_framework import status
 from sqlalchemy.orm import Session
 from sqlalchemy.sql import expression as sql_exp
 
@@ -37,12 +41,12 @@ def signup(item: signup_user, session: Session = Depends(get_session())) -> sign
     else:
         return JsonResponse(item, status=status.HTTP_201_CREATED)
 
-    '''
+'''
     if any(existing_user.username == item.username for existing_user in m.User):
         raise HTTPException(status_code=400, detail="Username already taken")
     else:
         return JsonResponse(item, status=status.HTTP_201_CREATED)
-    '''
+'''
 
 
 @router.post("/login")
