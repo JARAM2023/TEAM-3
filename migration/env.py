@@ -15,7 +15,7 @@ sys.path.append(os.getcwd())
 
 
 def _app_init():  # type: ignore
-    from app.models.postgres import ModelBase
+    from app.models.base_ import ModelBase
     from app.settings import AppSettings
 
     app_settings = AppSettings()

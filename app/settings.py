@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from typing import Any, Dict, Optional
 
-from pydantic import AnyUrl, BaseSettings, Field
+from pydantic.v1 import AnyUrl, BaseSettings, Field
 
 
 class AppSettings(BaseSettings):

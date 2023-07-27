@@ -4,7 +4,7 @@ from typing import Dict
 from django.http import JsonResponse
 from fastapi import APIRouter, Depends
 from pydantic import BaseModel
-from rest_framework import status
+
 from sqlalchemy.orm import Session
 from sqlalchemy.sql import expression as sql_exp
 
@@ -70,7 +70,7 @@ def diet_get(
 
 @router.post("/{user_id}/diet")
 def diet_post(user_id: int, item: Diet):
-    return JsonResponse(item, status=status.HTTP_201_CREATED)
+    return JsonResponse(item)
 
 
 @router.patch("/{user_id}")
